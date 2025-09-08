@@ -1,4 +1,3 @@
-# main.py
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from fuzzywuzzy import process
@@ -8,16 +7,15 @@ from models import SearchHistory, Game
 from training_test_KNN import GameRecommenderKNN
 import pandas as pd
 
-# ----------- Inicialização da API -----------
 app = FastAPI(title="Game Recommender API")
 
-# ----------- Modelo de entrada JSON -----------
+
 class RecommendRequest(BaseModel):
     game_name: str
     top_n: int = 10
     auto_correct: bool = True
 
-# ----------- Dependência para DB -----------
+
 def get_db():
     db = SessionLocal()
     try:
@@ -25,19 +23,18 @@ def get_db():
     finally:
         db.close()
 
-# ----------- Função de auto-correção -----------
+
 def find_closest_game(name, games_list, threshold=80):
     match, score = process.extractOne(name, games_list)
     return match if score >= threshold else None
 
-# ----------- Carregar modelo -----------
+
 recommender = GameRecommenderKNN.load_model("game_recommender_knn")
 
-# ----------- Endpoints -----------
 
 @app.get("/")
 def root():
-    return {"message": "API de Recomendação de Jogos funcionando!"}
+    return {"message": "API rodando!"}
 
 @app.post("/recommend")
 def recommend(request: RecommendRequest, db: Session = Depends(get_db)):

@@ -1,6 +1,6 @@
 import pandas as pd
 
-tags_df = pd.read_csv('tags.csv')
+tags_df = pd.read_csv('CSV/tags.csv')
 
 # Função para classificar peso baseado em relevância aparente
 def assign_weight(tag_name):

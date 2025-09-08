@@ -8,7 +8,7 @@ import ast  # para converter strings de listas em listas Python
 Base.metadata.create_all(bind=engine)
 
 # 2️⃣ Lê o CSV dos jogos
-games_df = pd.read_csv("jogo_s.csv")
+games_df = pd.read_csv("CSV/jogos.csv")
 
 # Converte colunas de listas (tags e generos) de string para lista Python
 def parse_list_column(value):
