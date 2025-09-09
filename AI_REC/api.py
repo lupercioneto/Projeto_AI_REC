@@ -9,6 +9,7 @@ import pandas as pd
 
 app = FastAPI(title="Game Recommender API")
 
+_model_instance = None
 
 class RecommendRequest(BaseModel):
     game_name: str
@@ -24,6 +25,13 @@ def get_db():
         db.close()
 
 
+def get_model():
+    global _model_instance
+    if _model_instance is None:
+        _model_instance = GameRecommenderKNN.load_model("game_recommender_knn")
+    return _model_instance
+
+
 def find_closest_game(name, games_list, threshold=80):
     match, score = process.extractOne(name, games_list)
     return match if score >= threshold else None
@@ -36,7 +44,7 @@ def root():
 @app.post("/recommend")
 def recommend(request: RecommendRequest, db: Session = Depends(get_db)):
 
-    recommender = GameRecommenderKNN.load_model("game_recommender_knn")
+    recommender = get_model()
 
     game_name = request.game_name
     top_n = request.top_n
