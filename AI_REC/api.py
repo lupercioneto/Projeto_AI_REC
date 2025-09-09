@@ -29,15 +29,15 @@ def find_closest_game(name, games_list, threshold=80):
     return match if score >= threshold else None
 
 
-recommender = GameRecommenderKNN.load_model("game_recommender_knn")
-
-
 @app.get("/")
 def root():
     return {"message": "API rodando!"}
 
 @app.post("/recommend")
 def recommend(request: RecommendRequest, db: Session = Depends(get_db)):
+
+    recommender = GameRecommenderKNN.load_model("game_recommender_knn")
+
     game_name = request.game_name
     top_n = request.top_n
 
