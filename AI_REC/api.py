@@ -53,7 +53,7 @@ def recommend(request: RecommendRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="top_n deve estar entre 1 e 50")
 
     # Verifica se o jogo existe
-    if game_name not in recommender.data["nome"].values:
+    if game_name not in recommender.data["nome"].str.lower().values:
         closest = find_closest_game(game_name, recommender.data["nome"].values)
         if closest and request.auto_correct:
             raise HTTPException(404, detail=f"Jogo não encontrado. Você quis dizer '{closest}'?")
